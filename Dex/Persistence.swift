@@ -7,6 +7,10 @@
 
 import CoreData
 
+enum Exception : Error{
+    case CommunicationException(_ message:String)
+}
+
 struct PersistenceController {
     static let shared = PersistenceController()
 
@@ -14,10 +18,19 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+        let newItem = PokeItem(context: viewContext)
+        newItem.id = 1
+        newItem.name = "bulbasaur"
+        newItem.types = ["grass","poison"]
+        newItem.hp = 45
+        newItem.attack = 49
+        newItem.defence = 49
+        newItem.specialAttack = 65
+        newItem.specialDefense = 65
+        newItem.speed = 45
+        newItem.spriteURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+        newItem.shinyURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png")
+        
         do {
             try viewContext.save()
         } catch {
@@ -28,6 +41,19 @@ struct PersistenceController {
         }
         return result
     }()
+    
+    @MainActor
+    static func fetchItemForPreveiw()->PokeItem {
+        do{
+            let request = NSFetchRequest<PokeItem>(entityName: "PokeItem")
+            request.fetchLimit = 1
+            let items = try PersistenceController.preview.container.viewContext.fetch(request)
+            return items[0]
+        }catch{
+            fatalError("Unable to fetch item for preview \(error)")
+        }
+    }
+
 
     let container: NSPersistentContainer
 
@@ -53,5 +79,19 @@ struct PersistenceController {
             }
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
+    }
+    
+    static func fetchPokeData(_ index: Int) async throws -> PokeTransportItem  {
+        guard let url = URL(string:"https://pokeapi.co/api/v2/ability/")?.appending(path: "\(index)") else {
+            throw Exception.CommunicationException("Unable to compose URL")
+        }
+        let (data,response) = try await URLSession.shared.data(from: url)
+        guard let http = response as? HTTPURLResponse, http.statusCode >= 200 && http.statusCode < 300 else {
+            throw Exception.CommunicationException("Invalid protocol type or response code: \(response)")
+        }
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        return try decoder.decode(PokeTransportItem.self, from: data)
     }
 }

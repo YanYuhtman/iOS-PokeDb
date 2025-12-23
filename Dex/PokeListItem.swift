@@ -1,0 +1,57 @@
+//
+//  PokeListItem.swift
+//  Dex
+//
+//  Created by Yan  on 23/12/2025.
+//
+import CoreData
+import SwiftUI
+
+struct PokeListItem: View {
+    let pokeItem:PokeItem
+    var body: some View {
+        HStack(){
+            AsyncImage(url: pokeItem.spriteURL){image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .scaleEffect(2.1)
+                    
+                    .frame(width: 60)
+//                    .border(Color.black,width: 1)
+                    
+            }placeholder: {
+                ProgressView()
+                    .frame(width: 60,height: 60)
+            }.padding(.leading,10)
+            Spacer()
+            VStack(alignment: .leading){
+                Text(pokeItem.name!)
+                    .font(.title3.bold())
+                HStack{
+                    if let types = pokeItem.types{
+                        ForEach(types,id:\.self){
+                            type in
+                            let color = Color(type.capitalized)
+                            Text(type)
+                                .padding(.all,2)
+                                .padding(.leading,3)
+                                .padding(.trailing,3)
+                                .background(){
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(color)
+                                }
+                        }
+                    }
+                    
+                    
+                }
+            }.padding(.trailing,10)
+        }
+        
+    }
+}
+
+#Preview {
+    PokeListItem(pokeItem: PersistenceController.fetchItemForPreveiw())
+}
