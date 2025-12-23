@@ -82,13 +82,14 @@ struct PersistenceController {
     }
     
     static func fetchPokeData(_ index: Int) async throws -> PokeTransportItem  {
-        guard let url = URL(string:"https://pokeapi.co/api/v2/ability/")?.appending(path: "\(index)") else {
+        guard let url = URL(string:"https://pokeapi.co/api/v2/pokemon/")?.appending(path: "\(index)") else {
             throw Exception.CommunicationException("Unable to compose URL")
         }
         let (data,response) = try await URLSession.shared.data(from: url)
         guard let http = response as? HTTPURLResponse, http.statusCode >= 200 && http.statusCode < 300 else {
             throw Exception.CommunicationException("Invalid protocol type or response code: \(response)")
         }
+        print(String(data: data, encoding: .utf8)!)
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         

@@ -10,23 +10,20 @@ import Foundation
 struct PokeTransportItem : Codable{
     let id:Int16
     let name:String
-    
-    //Types
+    var hp:Int16 = 0
+    var attack:Int16 = 0
+    var defense:Int16 = 0
+    var specialAttack:Int16 = 0
+    var specialDefense:Int16 = 0
+    var speed:Int16 = 0
+    var spriteURL:URL
+    var shinyURL:URL
     let types:[String]
     
-    //Stats
-    let hp:Int16
-    let attack:Int16
-    let defence:Int16
-    let specialAttack:Int16
-    let specialDefense:Int16
-    let speed:Int16
-    
-    //Sprites
-    let spriteURL:URL
-    let shinyURL:URL
     
     enum FirstLevelKeys: String, CodingKey{
+        case id
+        case name
         case stats
         case sprites
         case types
@@ -34,30 +31,78 @@ struct PokeTransportItem : Codable{
     enum TypesLevelKeys : String, CodingKey{
         case type
         
-        enum TypeLevelKeys : String, CodingKey{
+        enum Keys : String, CodingKey{
             case name
         }
         
     }
     
     
+    enum StatsLevelKeys:String, CodingKey{
+        case stat
+        case baseStat
+        
+        enum Keys : String, CodingKey{
+            case name
+        }
+    }
+    
+    enum SpritesLevelKeys : String, CodingKey{
+        case backDefault
+        case backShiny
+    }
+    
+    
     init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: FirstLevelKeys.self)
         self.id = try container.decode(Int16.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         
-        let _types = try container.nestedContainer(keyedBy: TypesLevelKeys.self, forKey: .types)
-        types = []
+        //Get Types
+        var _types:[String] = []
+        var typesArray = try container.nestedUnkeyedContainer(forKey: .types)
+        while !typesArray.isAtEnd{
+            let typeLevelContainer = try typesArray.nestedContainer(keyedBy: TypesLevelKeys.self)
+            let typeNameContainer = try typeLevelContainer.nestedContainer(keyedBy: TypesLevelKeys.Keys.self, forKey:.type)
+            _types.append(try typeNameContainer.decode(String.self, forKey:.name))
+                
+        }
+        self.types = _types
         
-        self.hp = try container.decode(Int16.self, forKey: .hp)
-        self.attack = try container.decode(Int16.self, forKey: .attack)
-        self.defence = try container.decode(Int16.self, forKey: .defence)
-        self.specialAttack = try container.decode(Int16.self, forKey: .specialAttack)
-        self.specialDefense = try container.decode(Int16.self, forKey: .specialDefense)
-        self.speed = try container.decode(Int16.self, forKey: .speed)
+        //Get stats
+        var statsArray = try container.nestedUnkeyedContainer(forKey: .stats)
+        while !statsArray.isAtEnd{
+            var statsElement = try statsArray.nestedContainer(keyedBy: StatsLevelKeys.self)
+            let value = try statsElement.decodeIfPresent(Int16.self, forKey: .baseStat) ?? 0
+            
+            let innerEllement = try statsElement.nestedContainer(keyedBy: StatsLevelKeys.Keys.self, forKey:.stat)
+            let name = try innerEllement.decode(String.self, forKey:StatsLevelKeys.Keys.name)
+            print("Stat name: \(name), value: \(value)" )
+            switch(name.lowercased()){
+            case "hp":
+                self.hp = value
+            case "attack":
+                attack = value
+            case "defense":
+                defense = value
+            case "special-attack":
+                specialAttack = value
+            case "special-defense":
+                specialDefense = value
+            case "speed":
+                speed = value
+            default:
+                print("Unsupported stat: \(name)")
+                
+            }
+        }
         
-        self.spriteURL = try container.decode(URL.self, forKey: .spriteURL)
-        self.shinyURL = try container.decode(URL.self, forKey: .shinyURL)
+        //Get Sprites
+        let spritesElement = try container.nestedContainer(keyedBy: SpritesLevelKeys.self, forKey: .sprites)
+        self.spriteURL = try spritesElement.decode(URL.self, forKey: .backDefault)
+        self.shinyURL = try spritesElement.decode(URL.self, forKey: .backShiny)
+        
+        
     }
     
     
