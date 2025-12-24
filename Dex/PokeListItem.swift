@@ -43,10 +43,12 @@ struct PokeListItem: View {
                                 }
                         }
                     }
-                    
-                    
-                }
-            }.padding(.trailing,10)
+            }
+            .padding(.trailing,10)
+            .background(){
+                Rectangle()
+                    .stroke(Color.blue,lineWidth: 2)
+            }
         }
         
     }
