@@ -16,6 +16,7 @@ struct PersistenceController {
         let result = PersistenceController()
         let context = result.container.viewContext
         
+        context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         return result
     }()
@@ -85,6 +86,13 @@ struct PersistenceController {
             }
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
+    }
+    func saveContext(){
+        do{
+            try self.container.viewContext.save()
+        }catch{
+            print("Unable to save persistant data \(error)")
+        }
     }
     @MainActor
     static func fetchAllAndInsert(){

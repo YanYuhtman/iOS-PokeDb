@@ -48,8 +48,8 @@ struct PokeTransportItem : Codable{
     }
     
     enum SpritesLevelKeys : String, CodingKey{
-        case backDefault
-        case backShiny
+        case frontDefault
+        case frontShiny
     }
     
     
@@ -99,8 +99,8 @@ struct PokeTransportItem : Codable{
         
         //Get Sprites
         let spritesElement = try container.nestedContainer(keyedBy: SpritesLevelKeys.self, forKey: .sprites)
-        self.spriteURL = try spritesElement.decode(URL.self, forKey: .backDefault)
-        self.shinyURL = try spritesElement.decode(URL.self, forKey: .backShiny)
+        self.spriteURL = try spritesElement.decode(URL.self, forKey: .frontDefault)
+        self.shinyURL = try spritesElement.decode(URL.self, forKey: .frontShiny)
         
         
     }

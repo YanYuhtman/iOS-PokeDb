@@ -8,7 +8,14 @@ import CoreData
 import SwiftUI
 
 struct PokeListItem: View {
-    let pokeItem:PokeItem
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @StateObject var pokeItem:PokeItem
+//    @State private var favorite:Bool
+//    init(pokeItem: PokeItem){
+//        self.pokeItem = pokeItem
+//        favorite = pokeItem.favorite
+//    }
     var body: some View {
         HStack(){
             AsyncImage(url: pokeItem.spriteURL){image in
@@ -18,35 +25,44 @@ struct PokeListItem: View {
                     .scaleEffect(2.1)
                 
                     .frame(width: 60)
-                //                    .border(Color.black,width: 1)
                 
             }placeholder: {
                 ProgressView()
                     .frame(width: 60,height: 60)
             }.padding(.leading,10)
                 .padding(.trailing, 60)
-           
-            VStack(alignment: .leading){
-                Text(pokeItem.name!)
-                    .font(.title3.bold())
-                HStack{
-                    if let types = pokeItem.types{
-                        ForEach(types,id:\.self){
-                            type in
-                            let color = Color(type.capitalized)
-                            Text(type)
-                                .padding(.all,2)
-                                .padding(.leading,3)
-                                .padding(.trailing,3)
-                                .background(){
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(color)
-                                }
+            
+            HStack{
+                VStack(alignment: .leading){
+                    
+                    Text(pokeItem.name!)
+                        .font(.title3.bold())
+                    HStack{
+                        if let types = pokeItem.types{
+                            ForEach(types,id:\.self){
+                                type in
+                                let color = Color(type.capitalized)
+                                Text(type)
+                                    .padding(.all,2)
+                                    .padding(.leading,3)
+                                    .padding(.trailing,3)
+                                    .background(){
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(color)
+                                    }
+                            }
                         }
                     }
+                    .padding(.trailing,10)
                 }
-                .padding(.trailing,10)
             }
+            Spacer()
+            Image(systemName: pokeItem.favorite ? "star.fill" : "star")
+                .resizable()
+                .foregroundColor(Color.yellow)
+                .scaledToFit()
+                .frame(width: 20,height: 20)
+                .padding(.trailing, 15)
         }
     }
 }

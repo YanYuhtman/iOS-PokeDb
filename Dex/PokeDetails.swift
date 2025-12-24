@@ -12,15 +12,22 @@ func getBackground(type:String)-> ImageResource{
     return switch(type.lowercased()){
     case "grass","normal","electric","poison","fairy":
         ImageResource.normalgrasselectricpoisonfairy
-    case "rock","ground","steel","flighting","ghost","dark","psychic":
+    case "rock","ground","steel","dark","psychic":
         ImageResource.rockgroundsteelfightingghostdarkpsychic
+    case "fire":
+        ImageResource.firedragon
+    case "flighting","ghost","flying","bug":
+        ImageResource.flyingbug
     default:
         ImageResource.water
     }
 }
 
 struct PokeDetails: View {
-    let pokeItem:PokeItem
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @StateObject var pokeItem:PokeItem
     var body: some View {
         ScrollView{
             VStack(alignment: .leading){
@@ -59,11 +66,22 @@ struct PokeDetails: View {
                             }
                     }
                     Spacer()
-                    Image(systemName: "star")
-                        .resizable()
-                        .foregroundColor(Color.yellow)
-                        .scaledToFill()
-                        .frame(width: 20)
+                    Button(action: {
+                        pokeItem.favorite.toggle()
+                        do{
+                            try viewContext.save()
+                        }catch{
+                            print("Unable to save favorite for \(String(describing: pokeItem.name))")
+                        }
+                    }
+                           , label:{
+                        Image(systemName: pokeItem.favorite ? "star.fill" : "star")
+                            .resizable()
+                            .foregroundColor(Color.yellow)
+                            .scaledToFill()
+                            .frame(width: 20)
+                    })
+                    
                         
                 }.padding()
                     .padding(.leading,0)

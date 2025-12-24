@@ -14,6 +14,7 @@ struct ContentView: View {
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \PokeItem.id, ascending: true)],
         animation: .default)
+    
     private var items: FetchedResults<PokeItem>
 
     var body: some View {
@@ -22,8 +23,10 @@ struct ContentView: View {
                 ForEach(items) { item in
                     NavigationLink(destination: {
                         PokeDetails(pokeItem: item)
+                            .environment(\.managedObjectContext, viewContext)
                     }, label: {
                         PokeListItem(pokeItem: item)
+                            .environment(\.managedObjectContext, viewContext)
                     })
 //                    NavigationLink {
 //                        Text("The pokeName is \(item.name!)")
@@ -36,7 +39,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem {
                     Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                        Label("Update", systemImage: "sparkles")
                     }
                 }
             }
