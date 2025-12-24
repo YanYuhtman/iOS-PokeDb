@@ -16,10 +16,10 @@ struct PokeListItem: View {
                     .resizable()
                     .scaledToFit()
                     .scaleEffect(2.1)
-                    
+                
                     .frame(width: 60)
-//                    .border(Color.black,width: 1)
-                    
+                //                    .border(Color.black,width: 1)
+                
             }placeholder: {
                 ProgressView()
                     .frame(width: 60,height: 60)
@@ -43,14 +43,15 @@ struct PokeListItem: View {
                                 }
                         }
                     }
+                }
+                .padding(.trailing,10)
+                .background(){
+                    Rectangle()
+                        .stroke(Color.blue,lineWidth: 2)
+                }
             }
-            .padding(.trailing,10)
-            .background(){
-                Rectangle()
-                    .stroke(Color.blue,lineWidth: 2)
-            }
+            
         }
-        
     }
 }
 
