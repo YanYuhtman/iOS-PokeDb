@@ -7,10 +7,12 @@
         <attribute name="hp" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String" defaultValueString="Noname"/>
+        <attribute name="shinyRaw" optional="YES" attributeType="Binary"/>
         <attribute name="shinyURL" optional="YES" attributeType="URI"/>
         <attribute name="specialAttack" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="specialDefense" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="speed" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="spriteRaw" optional="YES" attributeType="Binary"/>
         <attribute name="spriteURL" optional="YES" attributeType="URI"/>
         <attribute name="types" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
         <uniquenessConstraints>

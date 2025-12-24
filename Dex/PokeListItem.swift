@@ -18,7 +18,7 @@ struct PokeListItem: View {
 //    }
     var body: some View {
         HStack(){
-            AsyncImage(url: pokeItem.spriteURL){image in
+            AsyncImage(url: pokeItem.favorite ? pokeItem.shinyURL : pokeItem.spriteURL){image in
                 image
                     .resizable()
                     .scaledToFit()

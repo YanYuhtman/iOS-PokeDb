@@ -41,7 +41,7 @@ struct PokeDetails: View {
                             .scaledToFit()
                             .frame(width: gr.size.width)
                         
-                        AsyncImage(url: pokeItem.spriteURL) { image in
+                        AsyncImage(url:pokeItem.favorite ? pokeItem.shinyURL : pokeItem.spriteURL) { image in
                             image.resizable()
                                 .scaledToFit()
                                 .frame(width: gr.size.width)
