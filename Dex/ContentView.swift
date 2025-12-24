@@ -17,6 +17,7 @@ struct ContentView: View {
     
     private var items: FetchedResults<PokeItem>
 
+    
     var body: some View {
         NavigationView {
             List {
@@ -27,6 +28,16 @@ struct ContentView: View {
                     }, label: {
                         PokeListItem(pokeItem: item)
                             .environment(\.managedObjectContext, viewContext)
+                            .swipeActions(edge:.leading){
+                                Button(item.favorite ? "Remove from\nFavorites" : "Add to \nFavorites") {
+                                    item.favorite.toggle()
+                                    do{
+                                        try viewContext.save()
+                                    }catch{
+                                        print("Unable to save to favorites \(String(describing: item.name))")
+                                    }
+                                }.tint(item.favorite ? Color.gray : Color.yellow)
+                            }
                     })
 //                    NavigationLink {
 //                        Text("The pokeName is \(item.name!)")
@@ -34,6 +45,7 @@ struct ContentView: View {
 //                        Text(item.timestamp!, formatter: itemFormatter)
 //                    }
                 }
+                
                 .onDelete(perform: deleteItems)
             }
             .toolbar {
