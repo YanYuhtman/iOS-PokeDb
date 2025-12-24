@@ -24,7 +24,8 @@ struct PokeListItem: View {
                 ProgressView()
                     .frame(width: 60,height: 60)
             }.padding(.leading,10)
-            Spacer()
+                .padding(.trailing, 60)
+           
             VStack(alignment: .leading){
                 Text(pokeItem.name!)
                     .font(.title3.bold())
@@ -45,12 +46,7 @@ struct PokeListItem: View {
                     }
                 }
                 .padding(.trailing,10)
-                .background(){
-                    Rectangle()
-                        .stroke(Color.blue,lineWidth: 2)
-                }
             }
-            
         }
     }
 }
