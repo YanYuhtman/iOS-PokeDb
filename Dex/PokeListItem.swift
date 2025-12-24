@@ -18,19 +18,30 @@ struct PokeListItem: View {
 //    }
     var body: some View {
         HStack(){
-            AsyncImage(url: pokeItem.favorite ? pokeItem.shinyURL : pokeItem.spriteURL){image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .scaleEffect(2.1)
-                
-                    .frame(width: 60)
-                
-            }placeholder: {
-                ProgressView()
-                    .frame(width: 60,height: 60)
+            let url = pokeItem.favorite ? pokeItem.shinyURL : pokeItem.spriteURL
+            let rawData = pokeItem.favorite ? pokeItem.spriteRaw : pokeItem.shinyRaw
+            Group{
+                if let data = rawData, let image = UIImage(data: data){
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .scaleEffect(2.1)
+                        .frame(width: 60)
+                }else{
+                    AsyncImage(url: url){image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .scaleEffect(2.1)
+                            .frame(width: 60)
+                        
+                    }placeholder: {
+                        ProgressView()
+                            .frame(width: 60,height: 60)
+                    }
+                }
             }.padding(.leading,10)
-                .padding(.trailing, 60)
+             .padding(.trailing, 60)
             
             HStack{
                 VStack(alignment: .leading){

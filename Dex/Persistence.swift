@@ -4,8 +4,9 @@
 //
 //  Created by Yan  on 23/12/2025.
 //
-
+import Foundation
 import CoreData
+import UIKit
 
 enum Exception : Error{
     case CommunicationException(_ message:String)
@@ -96,6 +97,7 @@ struct PersistenceController {
     }
     @MainActor
     static func fetchAllAndInsert(){
+        let shared = shared
         let viewContext = shared.container.viewContext
         Task{
             do {
@@ -116,6 +118,7 @@ struct PersistenceController {
                     newItem.shinyURL = poke_t.shinyURL
                     
                     try viewContext.save()
+                    try await shared.downloadAllImages()
                 }
                 
                 
@@ -140,5 +143,71 @@ struct PersistenceController {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         return try decoder.decode(PokeTransportItem.self, from: data)
+    }
+    func downloadAllImages()async throws{
+        
+        let items = try container.viewContext.fetch(PokeItem.fetchRequest())
+        
+        try await withThrowingTaskGroup(of: UIImage?.self){ group in
+            for item in items {
+                let id = item.objectID
+                let name = item.name ?? "UNKNOWN"
+                let spriteURL = item.spriteURL
+                let shinyURL = item.shinyURL
+                group.addTask{
+                    try await downloadImage(id,name: name, url: spriteURL, sprite: true)
+                }
+                group.addTask{
+                    try await downloadImage(id,name: name, url:shinyURL, sprite: false)
+                }
+            }
+            try await group.waitForAll()
+        }
+        
+    }
+    private func downloadImage(_ pokeID:NSManagedObjectID, name: String, url:URL?,  sprite:Bool) async throws -> UIImage?{
+        let url = url
+        let id = pokeID
+        let name = name
+        
+        var img:UIImage? = nil
+        do{
+            guard let url = url else{
+                throw Exception.CommunicationException("Missing sprite url")
+            }
+            img = try await downloadImage(url)
+            let data = img!.pngData()
+            
+            try await MainActor.run{
+                if let pokeItem = try container.viewContext.existingObject(with: id) as? PokeItem{
+                    pokeItem.spriteRaw = data
+                    try? self.container.viewContext.save()
+                }
+            }
+            print("Downloaded \(sprite ? "sprite" : "shiny") image for \(name)")
+            
+        }catch{
+            print("Unable to download sprite image data for \(String(describing:name))")
+            throw error
+        }
+        return img
+    }
+    
+    private func downloadImage(_ link:String)async throws -> UIImage{
+        guard let url = URL(string: link) else {
+            throw Exception.CommunicationException("Invalid link format")
+        }
+        return try await downloadImage(url)
+    }
+    private func downloadImage(_ url:URL)async throws -> UIImage{
+        
+        let (data,response) = try await URLSession.shared.data(from: url)
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 else {
+            throw Exception.CommunicationException("Inavlid response: \(response)")
+        }
+        guard let image = UIImage(data: data) else{
+            throw Exception.CommunicationException("Unable to compose image from data")
+        }
+        return image
     }
 }
