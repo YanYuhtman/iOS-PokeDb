@@ -17,11 +17,21 @@ struct ContentView: View {
     
     private var items: FetchedResults<PokeItem>
 
+    @State var filter:String = ""
+    @State var showOnlyVavorites:Bool = false
     
+    var filtered:[PokeItem]{
+        
+        items.filter{ pokeItem in
+            let showByfavorite = showOnlyVavorites ? pokeItem.favorite : true
+            return showByfavorite &&
+            (pokeItem.name!.lowercased().contains(filter.lowercased()) || filter.isEmpty)
+        }
+    }
     var body: some View {
         NavigationView {
             List {
-                ForEach(items) { item in
+                ForEach(filtered) { item in
                     NavigationLink(destination: {
                         PokeDetails(pokeItem: item)
                             .environment(\.managedObjectContext, viewContext)
@@ -48,7 +58,22 @@ struct ContentView: View {
                 
                 .onDelete(perform: deleteItems)
             }
+            .navigationTitle("Pokies")
+            .searchable(text: $filter, prompt: "Filter items")
+            //The code is fine. XCode bugged
+            .onChange(of: filter){filter in
+                if filter.isEmpty{
+                    showOnlyVavorites = false
+                }
+            }
             .toolbar {
+                ToolbarItem {
+                    Button(action:{
+                        showOnlyVavorites.toggle()
+                    }){
+                        Label("Favoritest", systemImage: showOnlyVavorites ? "star.fill": "star")
+                    }
+                }
                 ToolbarItem {
                     Button(action: addItem) {
                         Label("Update", systemImage: "sparkles")
