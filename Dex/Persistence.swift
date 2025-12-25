@@ -118,8 +118,8 @@ struct PersistenceController {
                     newItem.shinyURL = poke_t.shinyURL
                     
                     try viewContext.save()
-                    try await shared.downloadAllImages()
                 }
+                try await shared.downloadAllImages()
                 
                 
             } catch {
@@ -184,7 +184,7 @@ struct PersistenceController {
                     try? self.container.viewContext.save()
                 }
             }
-            print("Downloaded \(sprite ? "sprite" : "shiny") image for \(name)")
+            print("Downloaded \(sprite ? "SPRITE" : "SHINY") image for \(name)")
             
         }catch{
             print("Unable to download sprite image data for \(String(describing:name))")

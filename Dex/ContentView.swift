@@ -75,7 +75,7 @@ struct ContentView: View {
                     }
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: fetchItems) {
                         Label("Update", systemImage: "sparkles")
                     }
                 }
@@ -84,7 +84,7 @@ struct ContentView: View {
         }
     }
 
-    private func addItem() {
+    private func fetchItems() {
         withAnimation {
             
 //            let newItem = PokeItem(context: viewContext)
