@@ -96,11 +96,38 @@ struct PersistenceController {
         }
     }
     
+    actor DownloaderActor {
+        private var downloadLock = false
+        var isLocaked:Bool{
+            return downloadLock
+        }
+        func lock() async{
+            downloadLock = true
+        }
+        func unlock() async {
+            downloadLock = false
+        }
+        func tryAndLock() async -> Bool{
+            guard !downloadLock else{
+                return false
+            }
+            downloadLock = true
+            return true
+        }
+    }
+    static let downloader = DownloaderActor()
     @MainActor
     static func fetchAllAndInsert(finished:@escaping ()->Void = {}){
         let shared = shared
         let viewContext = shared.container.viewContext
         Task{
+            guard await downloader.tryAndLock() else {
+                print("Download already in progress! ...")
+                return
+            }
+            let start = Date.now
+            print("[Tasks] Starting to fetch data: \(start)")
+            var downloadtasks: [Task<Void,Error>] = []
             do {
                 
                 for i in 1..<150 {
@@ -119,8 +146,20 @@ struct PersistenceController {
                     newItem.shinyURL = poke_t.shinyURL
                     
                     try viewContext.save()
+                    downloadtasks.append(Task
+                    {
+                        let _ = try await shared.downloadImage(newItem.objectID, name: poke_t.name, url: newItem.spriteURL, sprite: true)
+                        let _ = try await shared.downloadImage(newItem.objectID, name: poke_t.name, url: newItem.shinyURL, sprite: false)
+                    })
+                    
                 }
-                try await shared.downloadAllImages()
+                print("[Tasks] finished with json \(Date.now)")
+                for dtask in downloadtasks {
+                    let _ = await dtask.result
+                }
+                //Both approaches practically the same 
+//                try await shared.downloadAllImages()
+                print("[Tasks] finished with downloads \(Date.now)")
                 await MainActor.run{
                     finished()
                 }
@@ -131,6 +170,8 @@ struct PersistenceController {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+            await downloader.unlock()
+            print("[Tasks] finished fetchin data in: \((Date.now.timeIntervalSince(start)))")
         }
     }
     static func fetchPokeData(_ index: Int) async throws -> PokeTransportItem  {
@@ -147,7 +188,8 @@ struct PersistenceController {
         
         return try decoder.decode(PokeTransportItem.self, from: data)
     }
-    func downloadAllImages()async throws{
+    
+    private func downloadAllImages()async throws{
         
         let items = try container.viewContext.fetch(PokeItem.fetchRequest())
         
@@ -183,7 +225,11 @@ struct PersistenceController {
             
             try await MainActor.run{
                 if let pokeItem = try container.viewContext.existingObject(with: id) as? PokeItem{
-                    pokeItem.spriteRaw = data
+                    if(sprite){
+                        pokeItem.spriteRaw = data
+                    }else{
+                        pokeItem.shinyRaw = data
+                    }
                     try? self.container.viewContext.save()
                 }
             }

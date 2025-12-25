@@ -30,58 +30,71 @@ struct ContentView: View {
         }
     }
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(filtered) { item in
-                    NavigationLink(destination: {
-                        PokeDetails(pokeItem: item)
-                            .environment(\.managedObjectContext, viewContext)
-                    }, label: {
-                        PokeListItem(pokeItem: item)
-                            .environment(\.managedObjectContext, viewContext)
-                            .swipeActions(edge:.leading){
-                                Button(item.favorite ? "Remove from\nFavorites" : "Add to \nFavorites") {
-                                    item.favorite.toggle()
-                                    do{
-                                        try viewContext.save()
-                                    }catch{
-                                        print("Unable to save to favorites \(String(describing: item.name))")
-                                    }
-                                }.tint(item.favorite ? Color.gray : Color.yellow)
-                            }
-                    })
-//                    NavigationLink {
-//                        Text("The pokeName is \(item.name!)")
-//                    } label: {
-//                        Text(item.timestamp!, formatter: itemFormatter)
-//                    }
-                }
-                
-                .onDelete(perform: deleteItems)
-            }
-            .navigationTitle("Pokies")
-            .searchable(text: $filter, prompt: "Filter items")
-            //The code is fine. XCode bugged
-            .onChange(of: filter){filter in
-                if filter.isEmpty{
-                    showOnlyVavorites = false
-                }
-            }
-            .toolbar {
-                ToolbarItem {
-                    Button(action:{
-                        showOnlyVavorites.toggle()
-                    }){
-                        Label("Favoritest", systemImage: showOnlyVavorites ? "star.fill": "star")
+       
+        NavigationView{
+            if(items.count < 10){
+                ContentUnavailableView{
+                    Label("Please update poke content",image: .nopokemon)
+                }description:{
+                    Text("Poke content is unavailable or missing")
+                }actions:{
+                    Button("Update", systemImage: "antena.radiowaves.left.and.right"){
+                        fetchItems()
                     }
                 }
-                ToolbarItem {
-                    Button(action: fetchItems) {
-                        Label("Update", systemImage: "sparkles")
-                    }.disabled(disableUpdate)
+            }else
+            {
+                List {
+                    ForEach(filtered) { item in
+                        NavigationLink(destination: {
+                            PokeDetails(pokeItem: item)
+                                .environment(\.managedObjectContext, viewContext)
+                        }, label: {
+                            PokeListItem(pokeItem: item)
+                                .environment(\.managedObjectContext, viewContext)
+                                .swipeActions(edge:.leading){
+                                    Button(item.favorite ? "Remove from\nFavorites" : "Add to \nFavorites") {
+                                        item.favorite.toggle()
+                                        do{
+                                            try viewContext.save()
+                                        }catch{
+                                            print("Unable to save to favorites \(String(describing: item.name))")
+                                        }
+                                    }.tint(item.favorite ? Color.gray : Color.yellow)
+                                }
+                        })
+                        //                    NavigationLink {
+                        //                        Text("The pokeName is \(item.name!)")
+                        //                    } label: {
+                        //                        Text(item.timestamp!, formatter: itemFormatter)
+                        //                    }
+                    }
+                    
+                    .onDelete(perform: deleteItems)
+                }
+                .toolbar {
+                    ToolbarItem {
+                        Button(action:{
+                            showOnlyVavorites.toggle()
+                        }){
+                            Label("Favoritest", systemImage: showOnlyVavorites ? "star.fill": "star")
+                        }
+                    }
+                    ToolbarItem {
+                        Button(action: fetchItems) {
+                            Label("Update", systemImage: "sparkles")
+                        }.disabled(disableUpdate)
+                    }
+                }
+                .navigationTitle("Pokies")
+                .searchable(text: $filter, prompt: "Filter items")
+                //The code is fine. XCode bugged
+                .onChange(of: filter){filter in
+                    if filter.isEmpty{
+                        showOnlyVavorites = false
+                    }
                 }
             }
-            Text("Select an item")
         }
     }
 

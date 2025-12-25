@@ -36,7 +36,7 @@ struct PokeListItem: View {
             HStack{
                 VStack(alignment: .leading){
                     
-                    Text(pokeItem.name!)
+                    Text(pokeItem.name ?? "No name")
                         .font(.title3.bold())
                     HStack{
                         if let types = pokeItem.types{
