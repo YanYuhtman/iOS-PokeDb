@@ -41,15 +41,15 @@ struct PokeDetails: View {
                             .scaledToFit()
                             .frame(width: gr.size.width)
                         
-                        AsyncImage(url:pokeItem.favorite ? pokeItem.shinyURL : pokeItem.spriteURL) { image in
+                        PokeImage(pokeItem: pokeItem) { image in
                             image.resizable()
                                 .scaledToFit()
                                 .frame(width: gr.size.width)
-                            
-                        } placeholder: {
+                        } placeHolder: {
                             ProgressView()
                                 .frame(width: 100,height: 100)
                         }
+                        
                     }
                 }.frame(height: 500)
                 HStack{

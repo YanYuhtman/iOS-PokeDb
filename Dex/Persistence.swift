@@ -95,8 +95,9 @@ struct PersistenceController {
             print("Unable to save persistant data \(error)")
         }
     }
+    
     @MainActor
-    static func fetchAllAndInsert(){
+    static func fetchAllAndInsert(finished:@escaping ()->Void = {}){
         let shared = shared
         let viewContext = shared.container.viewContext
         Task{
@@ -120,7 +121,9 @@ struct PersistenceController {
                     try viewContext.save()
                 }
                 try await shared.downloadAllImages()
-                
+                await MainActor.run{
+                    finished()
+                }
                 
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
