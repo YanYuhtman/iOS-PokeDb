@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct DexApp: App {
+struct PokeDbApp: App {
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
