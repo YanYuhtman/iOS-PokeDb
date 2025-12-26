@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2CE321C82EFA92C1006FF547 /* Dex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dex.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2CE321DE2EFA92C2006FF547 /* DexTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DexTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2CE321E82EFA92C2006FF547 /* DexUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DexUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CE321C82EFA92C1006FF547 /* PokeDb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeDb.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CE321DE2EFA92C2006FF547 /* PokeDbTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokeDbTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CE321E82EFA92C2006FF547 /* PokeDbUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokeDbUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -85,9 +85,9 @@
 		2CE321C92EFA92C1006FF547 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2CE321C82EFA92C1006FF547 /* Dex.app */,
-				2CE321DE2EFA92C2006FF547 /* DexTests.xctest */,
-				2CE321E82EFA92C2006FF547 /* DexUITests.xctest */,
+				2CE321C82EFA92C1006FF547 /* PokeDb.app */,
+				2CE321DE2EFA92C2006FF547 /* PokeDbTests.xctest */,
+				2CE321E82EFA92C2006FF547 /* PokeDbUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2CE321C72EFA92C1006FF547 /* Dex */ = {
+		2CE321C72EFA92C1006FF547 /* PokeDb */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2CE321F22EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "Dex" */;
+			buildConfigurationList = 2CE321F22EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "PokeDb" */;
 			buildPhases = (
 				2CE321C42EFA92C1006FF547 /* Sources */,
 				2CE321C52EFA92C1006FF547 /* Frameworks */,
@@ -110,16 +110,16 @@
 			fileSystemSynchronizedGroups = (
 				2CE321CA2EFA92C1006FF547 /* Dex */,
 			);
-			name = Dex;
+			name = PokeDb;
 			packageProductDependencies = (
 			);
 			productName = Dex;
-			productReference = 2CE321C82EFA92C1006FF547 /* Dex.app */;
+			productReference = 2CE321C82EFA92C1006FF547 /* PokeDb.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2CE321DD2EFA92C2006FF547 /* DexTests */ = {
+		2CE321DD2EFA92C2006FF547 /* PokeDbTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2CE321F52EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "DexTests" */;
+			buildConfigurationList = 2CE321F52EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "PokeDbTests" */;
 			buildPhases = (
 				2CE321DA2EFA92C2006FF547 /* Sources */,
 				2CE321DB2EFA92C2006FF547 /* Frameworks */,
@@ -133,16 +133,16 @@
 			fileSystemSynchronizedGroups = (
 				2CE321E12EFA92C2006FF547 /* DexTests */,
 			);
-			name = DexTests;
+			name = PokeDbTests;
 			packageProductDependencies = (
 			);
 			productName = DexTests;
-			productReference = 2CE321DE2EFA92C2006FF547 /* DexTests.xctest */;
+			productReference = 2CE321DE2EFA92C2006FF547 /* PokeDbTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		2CE321E72EFA92C2006FF547 /* DexUITests */ = {
+		2CE321E72EFA92C2006FF547 /* PokeDbUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2CE321F82EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "DexUITests" */;
+			buildConfigurationList = 2CE321F82EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "PokeDbUITests" */;
 			buildPhases = (
 				2CE321E42EFA92C2006FF547 /* Sources */,
 				2CE321E52EFA92C2006FF547 /* Frameworks */,
@@ -156,11 +156,11 @@
 			fileSystemSynchronizedGroups = (
 				2CE321EB2EFA92C2006FF547 /* DexUITests */,
 			);
-			name = DexUITests;
+			name = PokeDbUITests;
 			packageProductDependencies = (
 			);
 			productName = DexUITests;
-			productReference = 2CE321E82EFA92C2006FF547 /* DexUITests.xctest */;
+			productReference = 2CE321E82EFA92C2006FF547 /* PokeDbUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2CE321C32EFA92C1006FF547 /* Build configuration list for PBXProject "Dex" */;
+			buildConfigurationList = 2CE321C32EFA92C1006FF547 /* Build configuration list for PBXProject "PokeDb" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2CE321C72EFA92C1006FF547 /* Dex */,
-				2CE321DD2EFA92C2006FF547 /* DexTests */,
-				2CE321E72EFA92C2006FF547 /* DexUITests */,
+				2CE321C72EFA92C1006FF547 /* PokeDb */,
+				2CE321DD2EFA92C2006FF547 /* PokeDbTests */,
+				2CE321E72EFA92C2006FF547 /* PokeDbUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		2CE321E02EFA92C2006FF547 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2CE321C72EFA92C1006FF547 /* Dex */;
+			target = 2CE321C72EFA92C1006FF547 /* PokeDb */;
 			targetProxy = 2CE321DF2EFA92C2006FF547 /* PBXContainerItemProxy */;
 		};
 		2CE321EA2EFA92C2006FF547 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2CE321C72EFA92C1006FF547 /* Dex */;
+			target = 2CE321C72EFA92C1006FF547 /* PokeDb */;
 			targetProxy = 2CE321E92EFA92C2006FF547 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -462,7 +462,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dex.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Dex";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PokeDb.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PokeDb";
 			};
 			name = Debug;
 		};
@@ -483,7 +483,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dex.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Dex";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PokeDb.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PokeDb";
 			};
 			name = Release;
 		};
@@ -522,7 +522,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2CE321C32EFA92C1006FF547 /* Build configuration list for PBXProject "Dex" */ = {
+		2CE321C32EFA92C1006FF547 /* Build configuration list for PBXProject "PokeDb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2CE321F02EFA92C2006FF547 /* Debug */,
@@ -531,7 +531,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2CE321F22EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "Dex" */ = {
+		2CE321F22EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "PokeDb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2CE321F32EFA92C2006FF547 /* Debug */,
@@ -540,7 +540,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2CE321F52EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "DexTests" */ = {
+		2CE321F52EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "PokeDbTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2CE321F62EFA92C2006FF547 /* Debug */,
@@ -549,7 +549,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2CE321F82EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "DexUITests" */ = {
+		2CE321F82EFA92C2006FF547 /* Build configuration list for PBXNativeTarget "PokeDbUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2CE321F92EFA92C2006FF547 /* Debug */,
