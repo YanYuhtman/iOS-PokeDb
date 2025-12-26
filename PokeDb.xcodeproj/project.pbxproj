@@ -29,20 +29,42 @@
 		2CE321E82EFA92C2006FF547 /* PokeDbUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokeDbUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2CE322792EFEA403006FF547 /* Exceptions for "UITests" folder in "PokeDb" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				UITests.swift,
+				UITestsLaunchTests.swift,
+			);
+			target = 2CE321C72EFA92C1006FF547 /* PokeDb */;
+		};
+		2CE3227B2EFEA407006FF547 /* Exceptions for "UITests" folder in "PokeDbTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				UITestsLaunchTests.swift,
+			);
+			target = 2CE321DD2EFA92C2006FF547 /* PokeDbTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2CE321CA2EFA92C1006FF547 /* Dex */ = {
+		2CE321CA2EFA92C1006FF547 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Dex;
+			path = App;
 			sourceTree = "<group>";
 		};
-		2CE321E12EFA92C2006FF547 /* DexTests */ = {
+		2CE321E12EFA92C2006FF547 /* Tests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DexTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
-		2CE321EB2EFA92C2006FF547 /* DexUITests */ = {
+		2CE321EB2EFA92C2006FF547 /* UITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DexUITests;
+			exceptions = (
+				2CE322792EFEA403006FF547 /* Exceptions for "UITests" folder in "PokeDb" target */,
+				2CE3227B2EFEA407006FF547 /* Exceptions for "UITests" folder in "PokeDbTests" target */,
+			);
+			path = UITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +97,9 @@
 		2CE321BF2EFA92C1006FF547 = {
 			isa = PBXGroup;
 			children = (
-				2CE321CA2EFA92C1006FF547 /* Dex */,
-				2CE321E12EFA92C2006FF547 /* DexTests */,
-				2CE321EB2EFA92C2006FF547 /* DexUITests */,
+				2CE321CA2EFA92C1006FF547 /* App */,
+				2CE321E12EFA92C2006FF547 /* Tests */,
+				2CE321EB2EFA92C2006FF547 /* UITests */,
 				2CE321C92EFA92C1006FF547 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -108,7 +130,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				2CE321CA2EFA92C1006FF547 /* Dex */,
+				2CE321CA2EFA92C1006FF547 /* App */,
+				2CE321EB2EFA92C2006FF547 /* UITests */,
 			);
 			name = PokeDb;
 			packageProductDependencies = (
@@ -131,7 +154,7 @@
 				2CE321E02EFA92C2006FF547 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				2CE321E12EFA92C2006FF547 /* DexTests */,
+				2CE321E12EFA92C2006FF547 /* Tests */,
 			);
 			name = PokeDbTests;
 			packageProductDependencies = (
@@ -154,7 +177,7 @@
 				2CE321EA2EFA92C2006FF547 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				2CE321EB2EFA92C2006FF547 /* DexUITests */,
+				2CE321EB2EFA92C2006FF547 /* UITests */,
 			);
 			name = PokeDbUITests;
 			packageProductDependencies = (
@@ -392,11 +415,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Dex/Dex.entitlements;
+				CODE_SIGN_ENTITLEMENTS = App/Dex.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Dex/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"App/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -421,11 +444,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Dex/Dex.entitlements;
+				CODE_SIGN_ENTITLEMENTS = App/Dex.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Dex/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"App/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

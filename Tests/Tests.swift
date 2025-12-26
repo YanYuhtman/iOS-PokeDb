@@ -6,9 +6,9 @@
 //
 
 import Testing
-@testable import Dex
+@testable import PokeDb
 
-struct DexTests {
+struct Tests {
 
     @Test func decode() async throws {
         await try PersistenceController.fetchPokeData(1)
