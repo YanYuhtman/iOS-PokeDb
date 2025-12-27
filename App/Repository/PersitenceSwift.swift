@@ -103,14 +103,15 @@ struct PersistenceSwiftController{
                     newItem.shinyURL = poke_t.shinyURL
                     
                     viewContext.insert(newItem)
-                    try viewContext.save()
+
                     downloadtasks.append(Task
                     {
                         let _ = try await shared.downloadImage(newItem.id, name: poke_t.name, url: newItem.spriteURL, sprite: true)
                         let _ = try await shared.downloadImage(newItem.id, name: poke_t.name, url: newItem.shinyURL, sprite: false)
                     })
-                    
+                   
                 }
+                try viewContext.save()
                 //Swift Data takes twice time for update
                 print("[Tasks] finished with json \(Date.now)")
                 for dtask in downloadtasks {
@@ -168,7 +169,7 @@ struct PersistenceSwiftController{
                     }else{
                         _pokeItem.shinyRaw = data
                     }
-                    try self.container.mainContext.save()
+//                    try self.container.mainContext.save()
                 }
             print("Downloaded \(sprite ? "SPRITE" : "SHINY") image for \(name)")
             
