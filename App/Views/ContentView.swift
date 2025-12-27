@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    @Environment(\.isInPreviewMode) private var isInPreView
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -21,6 +22,9 @@ struct ContentView: View {
     @State var showOnlyVavorites:Bool = false
     @State var disableUpdate:Bool = false
     
+    var isInPreviewMode:Bool {
+        return viewContext == PersistenceController.preview.container.viewContext
+    }
     var filtered:[PokeItem]{
         
         items.filter{ pokeItem in
@@ -32,7 +36,7 @@ struct ContentView: View {
     var body: some View {
        
         NavigationView{
-            if(items.count < 10){
+            if(!isInPreView && items.count < 10){
                 ContentUnavailableView{
                     Label("Please update poke content",image: .nopokemon)
                 }description:{
@@ -143,6 +147,8 @@ private let itemFormatter: DateFormatter = {
 }()
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environment(\.isInPreviewMode,true)
     //Test Commit
 }
