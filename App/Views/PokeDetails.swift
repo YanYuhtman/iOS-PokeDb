@@ -27,7 +27,8 @@ struct PokeDetails: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    @StateObject var pokeItem:PokeItem
+//    @StateObject
+    var pokeItem:PokeItem
     var body: some View {
         ScrollView{
             VStack(alignment: .leading){
@@ -149,8 +150,8 @@ struct Stats : View {
 }
 
 #Preview {
-    PokeDetails(pokeItem: PersistenceController.fetchItemForPreveiw())
+//    PokeDetails(pokeItem: PersistenceController.fetchItemForPreveiw())
 }
 #Preview {
-    Stats(pokeItem: PersistenceController.fetchItemForPreveiw())
+//    Stats(pokeItem: PersistenceController.fetchItemForPreveiw())
 }

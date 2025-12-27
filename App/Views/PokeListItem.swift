@@ -10,12 +10,8 @@ import SwiftUI
 struct PokeListItem: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @StateObject var pokeItem:PokeItem
-//    @State private var favorite:Bool
-//    init(pokeItem: PokeItem){
-//        self.pokeItem = pokeItem
-//        favorite = pokeItem.favorite
-//    }
+//    @StateObject
+    var pokeItem:PokeItem
     var body: some View {
         HStack(){
             let url = pokeItem.favorite ? pokeItem.shinyURL : pokeItem.spriteURL
@@ -68,6 +64,6 @@ struct PokeListItem: View {
     }
 }
 
-#Preview {
-    PokeListItem(pokeItem: PersistenceController.fetchItemForPreveiw())
-}
+//#Preview {
+//    PokeListItem(pokeItem: PersistenceController.fetchItemForPreveiw())
+//}

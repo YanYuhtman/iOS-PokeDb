@@ -1,101 +1,58 @@
 //
-//  Persistence.swift
-//  Dex
+//  PersitenceSwift.swift
+//  PokeDb
 //
-//  Created by Yan  on 23/12/2025.
+//  Created by Yan  on 27/12/2025.
 //
 import Foundation
-import CoreData
+import SwiftData
 import UIKit
 
-enum Exception : Error{
-    case CommunicationException(_ message:String)
-}
-
-struct PersistenceControllerOLD {
-    static let shared: PersistenceControllerOLD = {
-        let result = PersistenceControllerOLD()
-        let context = result.container.viewContext
-        
-        context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-        return result
-    }()
-
-    @MainActor
-    static let preview: PersistenceControllerOLD = {
-        let result = PersistenceControllerOLD(inMemory: true)
-        let viewContext = result.container.viewContext
-        let newItem = PokeItemOLD(context: viewContext)
-        newItem.id = 1
-        newItem.name = "bulbasaur"
-        newItem.types = ["grass","poison"]
-        newItem.hp = 45
-        newItem.attack = 49
-        newItem.defence = 49
-        newItem.specialAttack = 65
-        newItem.specialDefense = 65
-        newItem.speed = 45
-        newItem.spriteURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
-        newItem.shinyURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png")
-        
-        do {
-            try viewContext.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+struct PersistenceSwiftController{
+    let container:ModelContainer
+    static let shared:PersistenceSwiftController = {
+        do{
+            return try PersistenceSwiftController(container: ModelContainer(for: PokeItem.self))
+        }catch {
+            fatalError("Resolving shared SwiftData for container critical error: \(error)")
         }
-        return result
     }()
     
     @MainActor
-    static func fetchItemForPreveiw()->PokeItemOLD {
+    static let preview:PersistenceSwiftController = {
         do{
-            let request = NSFetchRequest<PokeItemOLD>(entityName: "PokeItemOLD")
-            request.fetchLimit = 1
-            let items = try PersistenceControllerOLD.preview.container.viewContext.fetch(request)
-            return items[0]
-        }catch{
-            fatalError("Unable to fetch item for preview \(error)")
-        }
-    }
-
-
-    let container: NSPersistentContainer
-
-    init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "Dex")
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        }
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
+            let schema = Schema([PokeItem.self])
+            let configuration = ModelConfiguration(schema: schema,isStoredInMemoryOnly: true)
+            let controller = try PersistenceSwiftController(container: ModelContainer(for: schema, configurations: [configuration]))
+            
+            let viewContext = controller.container.mainContext
+            let newItem = PokeItem()
+            newItem.id = 1
+            newItem.name = "bulbasaur"
+            newItem.types = ["grass","poison"]
+            newItem.hp = 45
+            newItem.attack = 49
+            newItem.defence = 49
+            newItem.specialAttack = 65
+            newItem.specialDefense = 65
+            newItem.speed = 45
+            newItem.spriteURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+            newItem.shinyURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png")
+            viewContext.insert(newItem)
+            
+            do {
+                try viewContext.save()
+            } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
-        })
-        container.viewContext.automaticallyMergesChangesFromParent = true
-    }
-    func saveContext(){
-        do{
-            try self.container.viewContext.save()
-        }catch{
-            print("Unable to save persistant data \(error)")
+            return controller
+        }catch {
+            fatalError("Resolving preview SwiftData container critical error: \(error)")
         }
-    }
-    
+    }()
     actor DownloaderActor {
         private var downloadLock = false
         var isLocaked:Bool{
@@ -118,8 +75,8 @@ struct PersistenceControllerOLD {
     static let downloader = DownloaderActor()
     @MainActor
     static func fetchAllAndInsert(finished:@escaping ()->Void = {}){
-        let shared = shared
-        let viewContext = shared.container.viewContext
+        let shared = PersistenceSwiftController.shared
+        let viewContext = shared.container.mainContext
         Task{
             guard await downloader.tryAndLock() else {
                 print("Download already in progress! ...")
@@ -132,7 +89,7 @@ struct PersistenceControllerOLD {
                 
                 for i in 1..<150 {
                     let poke_t = try await fetchPokeData(i)
-                    let newItem = PokeItemOLD(context: viewContext)
+                    let newItem = PokeItem()
                     newItem.id = poke_t.id
                     newItem.name = poke_t.name
                     newItem.types = poke_t.types
@@ -145,20 +102,20 @@ struct PersistenceControllerOLD {
                     newItem.spriteURL = poke_t.spriteURL
                     newItem.shinyURL = poke_t.shinyURL
                     
+                    viewContext.insert(newItem)
                     try viewContext.save()
                     downloadtasks.append(Task
                     {
-                        let _ = try await shared.downloadImage(newItem.objectID, name: poke_t.name, url: newItem.spriteURL, sprite: true)
-                        let _ = try await shared.downloadImage(newItem.objectID, name: poke_t.name, url: newItem.shinyURL, sprite: false)
+                        let _ = try await shared.downloadImage(newItem.id, name: poke_t.name, url: newItem.spriteURL, sprite: true)
+                        let _ = try await shared.downloadImage(newItem.id, name: poke_t.name, url: newItem.shinyURL, sprite: false)
                     })
                     
                 }
+                //Swift Data takes twice time for update
                 print("[Tasks] finished with json \(Date.now)")
                 for dtask in downloadtasks {
                     let _ = await dtask.result
                 }
-                //Both approaches practically the same 
-//                try await shared.downloadAllImages()
                 print("[Tasks] finished with downloads \(Date.now)")
                 await MainActor.run{
                     finished()
@@ -189,30 +146,8 @@ struct PersistenceControllerOLD {
         return try decoder.decode(PokeTransportItem.self, from: data)
     }
     
-    private func downloadAllImages()async throws{
-        
-        let items = try container.viewContext.fetch(PokeItemOLD.fetchRequest())
-        
-        try await withThrowingTaskGroup(of: UIImage?.self){ group in
-            for item in items {
-                let id = item.objectID
-                let name = item.name ?? "UNKNOWN"
-                let spriteURL = item.spriteURL
-                let shinyURL = item.shinyURL
-                group.addTask{
-                    try await downloadImage(id,name: name, url: spriteURL, sprite: true)
-                }
-                group.addTask{
-                    try await downloadImage(id,name: name, url:shinyURL, sprite: false)
-                }
-            }
-            try await group.waitForAll()
-        }
-        
-    }
-    private func downloadImage(_ pokeID:NSManagedObjectID, name: String, url:URL?,  sprite:Bool) async throws -> UIImage?{
+    private func downloadImage(_ pokeItemID:Int16, name: String, url:URL?,  sprite:Bool) async throws -> UIImage?{
         let url = url
-        let id = pokeID
         let name = name
         
         var img:UIImage? = nil
@@ -220,19 +155,21 @@ struct PersistenceControllerOLD {
             guard let url = url else{
                 throw Exception.CommunicationException("Missing sprite url")
             }
-            img = try await downloadImage(url)
+            img = try await self.downloadImage(url)
             let data = img!.pngData()
             
             try await MainActor.run{
-                if let pokeItem = try container.viewContext.existingObject(with: id) as? PokeItem{
+                
+                var descriptor = FetchDescriptor<PokeItem>(predicate: #Predicate { $0.id == pokeItemID })
+                descriptor.fetchLimit = 1
+                let _pokeItem = try container.mainContext.fetch(descriptor)[0]
                     if(sprite){
-                        pokeItem.spriteRaw = data
+                        _pokeItem.spriteRaw = data
                     }else{
-                        pokeItem.shinyRaw = data
+                        _pokeItem.shinyRaw = data
                     }
-                    try? self.container.viewContext.save()
+                    try self.container.mainContext.save()
                 }
-            }
             print("Downloaded \(sprite ? "SPRITE" : "SHINY") image for \(name)")
             
         }catch{
@@ -259,4 +196,6 @@ struct PersistenceControllerOLD {
         }
         return image
     }
+    
+   
 }

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct PokeImage<ImageContent : View, PlaceHolderContent : View>: View{
-    @StateObject var pokeItem: PokeItem
+//    @StateObject
+    var pokeItem: PokeItem
     let image: (Image) -> ImageContent
     let placeHolder: () -> PlaceHolderContent
     
@@ -16,8 +17,8 @@ struct PokeImage<ImageContent : View, PlaceHolderContent : View>: View{
          @ViewBuilder image: @escaping (Image) -> ImageContent,
          @ViewBuilder placeHolder: @escaping () -> PlaceHolderContent)
     {
-        
-        self._pokeItem = StateObject(wrappedValue: pokeItem)
+        self.pokeItem = pokeItem
+//        self._pokeItem = StateObject(wrappedValue: pokeItem)
         self.image = image
         self.placeHolder = placeHolder
     }
@@ -56,20 +57,20 @@ struct PokeImage<ImageContent : View, PlaceHolderContent : View>: View{
     }
 }
 
-#Preview {
-    PokeImage(pokeItem: PersistenceController.fetchItemForPreveiw(),
-              image: {image in
-        image
-            .resizable()
-            .scaledToFit()
-            .scaledToFit()
-            .frame(width: 200)
-        
-            
-    },placeHolder: {
-        ProgressView()
-            .frame(width: 100,height: 100)
-            .background(Color.red)
-    })
-        
-}
+//#Preview {
+//    PokeImage(pokeItem: PersistenceController.fetchItemForPreveiw(),
+//              image: {image in
+//        image
+//            .resizable()
+//            .scaledToFit()
+//            .scaledToFit()
+//            .frame(width: 200)
+//        
+//            
+//    },placeHolder: {
+//        ProgressView()
+//            .frame(width: 100,height: 100)
+//            .background(Color.red)
+//    })
+//        
+//}

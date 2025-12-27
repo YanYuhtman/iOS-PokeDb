@@ -6,25 +6,18 @@
 //
 
 import SwiftUI
-import CoreData
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var viewContext
     @Environment(\.isInPreviewMode) private var isInPreView
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \PokeItem.id, ascending: true)],
-        animation: .default)
+//    @Query(sort: \PokeItem.name, order: .forward) private var items:[PokeItem]
+    @Query() private var items:[PokeItem]
     
-    private var items: FetchedResults<PokeItem>
-
     @State var filter:String = ""
     @State var showOnlyVavorites:Bool = false
     @State var disableUpdate:Bool = false
     
-    var isInPreviewMode:Bool {
-        return viewContext == PersistenceController.preview.container.viewContext
-    }
     var filtered:[PokeItem]{
         
         items.filter{ pokeItem in
@@ -52,10 +45,8 @@ struct ContentView: View {
                     ForEach(filtered) { item in
                         NavigationLink(destination: {
                             PokeDetails(pokeItem: item)
-                                .environment(\.managedObjectContext, viewContext)
                         }, label: {
                             PokeListItem(pokeItem: item)
-                                .environment(\.managedObjectContext, viewContext)
                                 .swipeActions(edge:.leading){
                                     Button(item.favorite ? "Remove from\nFavorites" : "Add to \nFavorites") {
                                         item.favorite.toggle()
@@ -110,10 +101,10 @@ struct ContentView: View {
             //            newItem.timestamp = Date()
             
             do {
-                PersistenceController.fetchAllAndInsert(finished: {
+                PersistenceSwiftController.fetchAllAndInsert {
                     disableUpdate = false
-                })
-                //                try viewContext.save()
+                }
+                try viewContext.save()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -148,7 +139,6 @@ private let itemFormatter: DateFormatter = {
 
 #Preview {
     ContentView()
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environment(\.modelContext, PersistenceSwiftController.preview.container.mainContext)
         .environment(\.isInPreviewMode,true)
-    //Test Commit
 }
