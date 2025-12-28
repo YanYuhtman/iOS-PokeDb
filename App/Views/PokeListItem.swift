@@ -64,6 +64,7 @@ struct PokeListItem: View {
     }
 }
 
-//#Preview {
-//    PokeListItem(pokeItem: PersistenceController.fetchItemForPreveiw())
-//}
+#Preview {
+    PokeListItem(pokeItem: PersistenceSwiftController.preview.fetchItemForPreveiw())
+        .environment(\.isInPreviewMode, true)
+}

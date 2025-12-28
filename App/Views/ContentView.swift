@@ -58,11 +58,6 @@ struct ContentView: View {
                                     }.tint(item.favorite ? Color.gray : Color.yellow)
                                 }
                         })
-                        //                    NavigationLink {
-                        //                        Text("The pokeName is \(item.name!)")
-                        //                    } label: {
-                        //                        Text(item.timestamp!, formatter: itemFormatter)
-                        //                    }
                     }
                     
                     .onDelete(perform: deleteItems)

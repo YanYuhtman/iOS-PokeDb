@@ -53,6 +53,16 @@ struct PersistenceSwiftController{
             fatalError("Resolving preview SwiftData container critical error: \(error)")
         }
     }()
+    @MainActor
+    func fetchItemForPreveiw() -> PokeItem{
+        do{
+            var descriptor = FetchDescriptor<PokeItem>()
+            descriptor.fetchLimit = 1
+            return try container.mainContext.fetch(descriptor)[0]
+        }catch{
+            fatalError("Unable to fatch single item \(error)")
+        }
+    }
     actor DownloaderActor {
         private var downloadLock = false
         var isLocaked:Bool{

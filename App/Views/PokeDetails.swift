@@ -150,8 +150,10 @@ struct Stats : View {
 }
 
 #Preview {
-//    PokeDetails(pokeItem: PersistenceController.fetchItemForPreveiw())
+    PokeDetails(pokeItem: PersistenceSwiftController.preview.fetchItemForPreveiw())
+        .environment(\.isInPreviewMode, true)
 }
 #Preview {
-//    Stats(pokeItem: PersistenceController.fetchItemForPreveiw())
+    Stats(pokeItem: PersistenceSwiftController.preview.fetchItemForPreveiw())
+        .environment(\.isInPreviewMode, true)
 }
