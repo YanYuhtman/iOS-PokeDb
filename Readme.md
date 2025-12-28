@@ -20,7 +20,7 @@ PokeDb is a modern and interactive iOS application built with SwiftUI, designed 
 ## Technologies Used
 
 -   **SwiftUI:** For a declarative and modern user interface.
--   **Core Data:** Apple's new persistence framework for efficient local data storage. (For Swift Data migration see migration/SwiftData branch)
+-   **Core Data:** Apple's new persistence framework for efficient local data storage. (For Swift Data migration see `migration/SwiftData` branch)
 -   **Charts Framework:** To provide rich and interactive visualizations of Pokémon stats.
 -   **Swift:** The powerful and intuitive programming language for iOS development.
 
